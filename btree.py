@@ -24,7 +24,7 @@ class BTree:
                 return -10000, None
             if top.board.winner() == player_character:
                 return 1, None
-            if top.board.winner == "Draw":
+            if top.board.winner() == "Draw":
                 return 0, None
             if top.board.winner():
                 return -1, None
