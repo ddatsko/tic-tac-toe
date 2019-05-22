@@ -25,8 +25,8 @@ class Game:
             self.player_character = self.board.O
             self.computer_character = self.board.X
         else:
-            self.computer_character = self.board.X
-            self.player_character = self.board.O
+            self.computer_character = self.board.O
+            self.player_character = self.board.X
 
     def print_state(self):
         """
@@ -34,6 +34,7 @@ class Game:
         :return:
         """
         os.system("clear")
+        print()
         print(self.board)
         print(f"Your move, {self.player}")
 
@@ -45,8 +46,7 @@ class Game:
         position = input("Enter the position to move to (e.g.: 0 2): ").split()
         while not Board.check_position(position) or not self.board.make_move(tuple(map(int, position)),
                                                                              self.player_character):
-            print(tuple(map(int, position)))
-            position = input("Enter one more time: ")
+            position = input("Enter one more time: ").split()
 
     def make_move_by_computer(self):
         """
@@ -54,7 +54,7 @@ class Game:
         :return:None
         """
         tree = BTree(self.board)
-        position = tree.build_tree(self.computer_character)[1]
+        position = tree.build_tree(self.computer_character, self.player_character)[1]
         self.board.make_move(position, self.computer_character)
 
     def find_winner(self):
@@ -76,14 +76,19 @@ if __name__ == "__main__":
     game = Game(init_board)
     game.get_init_info()
     while not game.find_winner():
-        game.print_state()
         if game.player_character == game.board.X:
+            game.print_state()
             game.get_user_input()
             if game.find_winner():
                 break
             game.make_move_by_computer()
         else:
             game.make_move_by_computer()
+            game.print_state()
             if game.find_winner():
                 break
             game.get_user_input()
+    os.system("clear")
+    print()
+    print(game.board)
+    print(game.find_winner())
